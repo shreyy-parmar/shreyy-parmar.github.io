@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shrey Parmar — Azure Data Engineer</title>
+<meta name="description" content="Shrey Parmar — Azure Data Engineer in Toronto. ADF, Databricks, PySpark, Delta Lake, Synapse Analytics, Microsoft Fabric.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #faf9f6;
+    --ink: #14161a;
+    --ink-soft: #4a4e57;
+    --ink-faint: #85888f;
+    --line: #dcdcd4;
+    --panel: #f1f1ea;
+    --accent: #2b5c8a;
+    --accent-soft: #e7eef3;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --sans: 'IBM Plex Sans', -apple-system, sans-serif;
+    --max: 1080px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{color:inherit;}
+
+  img{max-width:100%; display:block;}
+
+  .wrap{max-width:var(--max); margin:0 auto; padding:0 28px;}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(250,249,246,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:64px;
+  }
+  .brand{
+    font-family:var(--mono); font-weight:600; font-size:15px;
+    letter-spacing:0.02em;
+  }
+  .brand span{color:var(--accent);}
+  .navlinks{display:flex; gap:28px; list-style:none; font-family:var(--mono); font-size:13px;}
+  .navlinks a{
+    text-decoration:none; color:var(--ink-soft);
+    transition:color .15s ease;
+  }
+  .navlinks a:hover, .navlinks a:focus-visible{color:var(--accent);}
+  .navlinks a::before{content:"// "; color:var(--ink-faint);}
+  .navtoggle{display:none; background:none; border:1px solid var(--line); border-radius:4px; padding:8px 10px; font-family:var(--mono); font-size:13px; color:var(--ink); cursor:pointer;}
+
+  @media (max-width: 760px){
+    .navlinks{
+      position:absolute; top:64px; left:0; right:0;
+      background:var(--bg); border-bottom:1px solid var(--line);
+      flex-direction:column; gap:0; padding:8px 0;
+      display:none;
+    }
+    .navlinks.open{display:flex;}
+    .navlinks a{display:block; padding:12px 28px; width:100%;}
+    .navtoggle{display:block;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:88px 0 72px;
+    border-bottom:1px solid var(--line);
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.1fr 1fr; gap:56px; align-items:center;
+  }
+  @media (max-width: 860px){
+    .hero-grid{grid-template-columns:1fr; gap:40px;}
+  }
+  .eyebrow{
+    font-family:var(--mono); font-size:13px; color:var(--accent);
+    letter-spacing:0.03em; margin-bottom:18px;
+  }
+  h1{
+    font-family:var(--mono); font-weight:600;
+    font-size:clamp(34px, 5vw, 52px);
+    line-height:1.08; letter-spacing:-0.01em;
+    margin-bottom:18px;
+  }
+  .hero-sub{
+    font-size:18px; color:var(--ink-soft); max-width:46ch; margin-bottom:28px;
+  }
+  .hero-meta{
+    font-family:var(--mono); font-size:13px; color:var(--ink-faint);
+    margin-bottom:32px; display:flex; gap:18px; flex-wrap:wrap;
+  }
+  .hero-meta span::before{content:"◦ "; color:var(--accent);}
+  .cta-row{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    font-family:var(--mono); font-size:13px; text-decoration:none;
+    padding:12px 20px; border-radius:4px; border:1px solid var(--ink);
+    transition:all .15s ease; display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary{background:var(--ink); color:var(--bg);}
+  .btn-primary:hover{background:var(--accent); border-color:var(--accent);}
+  .btn-ghost{border-color:var(--line); color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--ink);}
+
+  /* ---------- PIPELINE DIAGRAM ---------- */
+  .pipeline{width:100%; height:auto;}
+  .pipeline .node-circle{
+    fill:var(--bg); stroke:var(--ink); stroke-width:1.4;
+  }
+  .pipeline .node-circle.active{stroke:var(--accent);}
+  .pipeline .node-label{
+    font-family:var(--mono); font-size:10.5px; fill:var(--ink-soft);
+    text-anchor:middle;
+  }
+  .pipeline .node-icon{stroke:var(--ink); stroke-width:1.3; fill:none;}
+  .pipeline .flow-line{
+    fill:none; stroke:var(--ink-faint); stroke-width:1.2;
+  }
+  .pipeline .flow-dash{
+    fill:none; stroke:var(--accent); stroke-width:1.6;
+    stroke-dasharray:4 6;
+    animation:flow 3.2s linear infinite;
+  }
+  @keyframes flow{ to{ stroke-dashoffset:-40; } }
+  @media (prefers-reduced-motion: reduce){
+    .pipeline .flow-dash{animation:none;}
+  }
+
+  /* ---------- SECTION SHARED ---------- */
+  section{padding:76px 0; border-bottom:1px solid var(--line);}
+  .sec-head{display:flex; align-items:baseline; gap:14px; margin-bottom:36px;}
+  .sec-tag{font-family:var(--mono); font-size:12px; color:var(--accent);}
+  .sec-title{font-family:var(--mono); font-weight:600; font-size:24px;}
+  .sec-line{flex:1; height:1px; background:var(--line);}
+
+  .reveal{opacity:0; transform:translateY(14px); transition:opacity .5s ease, transform .5s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{display:grid; grid-template-columns:1.3fr 1fr; gap:48px;}
+  @media (max-width:760px){ .about-grid{grid-template-columns:1fr;} }
+  .about-grid p{color:var(--ink-soft); margin-bottom:14px; max-width:62ch;}
+  .stat-box{
+    border:1px solid var(--line); border-radius:6px; padding:20px;
+    background:var(--panel);
+  }
+  .stat-box + .stat-box{margin-top:12px;}
+  .stat-num{font-family:var(--mono); font-weight:600; font-size:22px; color:var(--accent);}
+  .stat-label{font-family:var(--mono); font-size:12px; color:var(--ink-soft); margin-top:4px;}
+
+  /* ---------- EXPERIENCE (lineage timeline) ---------- */
+  .timeline{position:relative; padding-left:28px;}
+  .timeline::before{
+    content:""; position:absolute; left:5px; top:6px; bottom:6px; width:1px;
+    background:var(--line);
+  }
+  .tl-item{position:relative; padding-bottom:40px;}
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-item::before{
+    content:""; position:absolute; left:-28px; top:4px;
+    width:11px; height:11px; border-radius:50%;
+    background:var(--bg); border:2px solid var(--accent);
+  }
+  .tl-role{font-family:var(--mono); font-weight:600; font-size:16px;}
+  .tl-org{color:var(--accent); font-weight:500;}
+  .tl-meta{font-family:var(--mono); font-size:12.5px; color:var(--ink-faint); margin:4px 0 10px;}
+  .tl-desc{color:var(--ink-soft); max-width:62ch;}
+
+  /* ---------- PROJECTS ---------- */
+  .proj-lead{
+    display:grid; grid-template-columns:repeat(2, 1fr); gap:24px; margin-bottom:24px;
+  }
+  @media (max-width:760px){ .proj-lead{grid-template-columns:1fr;} }
+  .card{
+    border:1px solid var(--line); border-radius:8px; padding:26px;
+    background:var(--panel); transition:border-color .15s ease, transform .15s ease;
+  }
+  .card:hover{border-color:var(--accent); transform:translateY(-2px);}
+  .card-tag{font-family:var(--mono); font-size:11px; color:var(--accent); margin-bottom:10px; letter-spacing:.03em;}
+  .card h3{font-family:var(--mono); font-size:17px; margin-bottom:10px;}
+  .card p{color:var(--ink-soft); font-size:14.5px; margin-bottom:16px;}
+  .tags{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;}
+  .tag{
+    font-family:var(--mono); font-size:11px; color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:3px; padding:3px 8px; background:var(--bg);
+  }
+  .card-link{
+    font-family:var(--mono); font-size:12.5px; color:var(--ink); text-decoration:none;
+    border-bottom:1px solid var(--ink); padding-bottom:1px;
+  }
+  .card-link:hover{color:var(--accent); border-color:var(--accent);}
+
+  .proj-more{display:grid; grid-template-columns:repeat(3, 1fr); gap:20px;}
+  @media (max-width:860px){ .proj-more{grid-template-columns:1fr 1fr;} }
+  @media (max-width:560px){ .proj-more{grid-template-columns:1fr;} }
+  .card-sm{
+    border:1px solid var(--line); border-radius:8px; padding:20px;
+    transition:border-color .15s ease;
+  }
+  .card-sm:hover{border-color:var(--accent);}
+  .card-sm h4{font-family:var(--mono); font-size:14px; margin-bottom:8px;}
+  .card-sm p{color:var(--ink-soft); font-size:13.5px; margin-bottom:12px;}
+
+  /* ---------- SKILLS ---------- */
+  .skills-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:28px 24px;}
+  @media (max-width:760px){ .skills-grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:480px){ .skills-grid{grid-template-columns:1fr;} }
+  .skill-col-title{
+    font-family:var(--mono); font-size:12px; color:var(--ink-faint);
+    text-transform:uppercase; letter-spacing:.06em; margin-bottom:12px;
+    border-bottom:1px solid var(--line); padding-bottom:8px;
+  }
+  .skill-list{list-style:none; display:flex; flex-direction:column; gap:8px;}
+  .skill-list li{font-family:var(--mono); font-size:13.5px; color:var(--ink);}
+  .skill-list li::before{content:"◦ "; color:var(--accent);}
+
+  /* ---------- CERTIFICATIONS ---------- */
+  .cert-row{display:flex; gap:20px; flex-wrap:wrap;}
+  .cert-badge{
+    display:flex; align-items:center; gap:14px;
+    border:1px solid var(--line); border-radius:8px; padding:16px 20px;
+    background:var(--panel); flex:1; min-width:260px;
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .cert-badge:hover{border-color:var(--accent); transform:translateY(-2px);}
+  .cert-badge svg{flex-shrink:0;}
+  .cert-name{font-family:var(--mono); font-weight:600; font-size:14px;}
+  .cert-issuer{font-family:var(--mono); font-size:12px; color:var(--ink-faint); margin-top:2px;}
+
+  /* ---------- CONTACT ---------- */
+  .contact{border-bottom:none;}
+  .contact-inner{
+    display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap;
+  }
+  .contact h2{
+    font-family:var(--mono); font-weight:600; font-size:clamp(26px,4vw,38px);
+    max-width:16ch; line-height:1.15;
+  }
+  .contact-links{display:flex; flex-direction:column; gap:10px; font-family:var(--mono); font-size:14px;}
+  .contact-links a{text-decoration:none; color:var(--ink-soft); transition:color .15s ease;}
+  .contact-links a:hover{color:var(--accent);}
+
+  footer{
+    padding:28px 0; font-family:var(--mono); font-size:12px; color:var(--ink-faint);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="brand">shrey<span>.</span>parmar</div>
+    <ul class="navlinks" id="navlinks">
+      <li><a href="#about">about</a></li>
+      <li><a href="#experience">experience</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#skills">skills</a></li>
+      <li><a href="#education">education</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+    <button class="navtoggle" id="navtoggle" aria-label="Toggle menu" aria-expanded="false">menu</button>
+  </nav>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" style="border-bottom:1px solid var(--line); padding-top:88px;">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow">// azure data engineer</div>
+        <h1>Shrey Parmar</h1>
+        <p class="hero-sub">I build pipelines that move raw data into decisions — on Azure, Databricks, and Microsoft Fabric.</p>
+        <div class="hero-meta">
+          <span>Toronto, Canada</span>
+          <span>Currently at Bell</span>
+          <span>MSc CS, Lakehead University</span>
+        </div>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#projects">View projects</a>
+          <a class="btn btn-ghost" href="mailto:shreyyogeshbhaiparmar@gmail.com">Get in touch</a>
+        </div>
+      </div>
+      <div>
+        <svg class="pipeline" viewBox="0 0 460 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram of a data pipeline flowing from raw data through ADF, Databricks, Delta Lake, to Power BI">
+          <!-- connecting flow paths -->
+          <path class="flow-line" d="M60,50 L400,50" />
+          <path class="flow-dash" d="M60,50 L400,50" />
+          <path class="flow-line" d="M60,50 L60,130 L400,130" />
+          <path class="flow-line" d="M400,130 L400,210 L60,210" />
+
+          <!-- node: RAW -->
+          <circle class="node-circle active" cx="60" cy="50" r="26"/>
+          <path class="node-icon" d="M48,44 h24 v14 h-24 z M48,44 l12,7 12,-7" transform="translate(0,-2)"/>
+          <text class="node-label" x="60" y="92">RAW</text>
+
+          <!-- node: ADF -->
+          <circle class="node-circle" cx="230" cy="50" r="26"/>
+          <path class="node-icon" d="M220,58 l8,-16 8,16 z" transform="translate(0,0)"/>
+          <text class="node-label" x="230" y="92">ADF</text>
+
+          <!-- node: DATABRICKS -->
+          <circle class="node-circle" cx="400" cy="50" r="26"/>
+          <path class="node-icon" d="M390,44 l10,-6 10,6 -10,6 z M390,54 l10,-6 10,6 -10,6 z"/>
+          <text class="node-label" x="400" y="92">DATABRICKS</text>
+
+          <!-- node: DELTA LAKE -->
+          <circle class="node-circle" cx="400" cy="130" r="26"/>
+          <path class="node-icon" d="M400,118 l10,20 h-20 z"/>
+          <text class="node-label" x="400" y="172">DELTA LAKE</text>
+
+          <!-- node: POWER BI -->
+          <circle class="node-circle" cx="60" cy="210" r="26"/>
+          <path class="node-icon" d="M50,218 v-14 M60,218 v-20 M70,218 v-8"/>
+          <text class="node-label" x="60" y="252">POWER BI</text>
+
+          <!-- mid label -->
+          <text class="node-label" x="230" y="132" fill="var(--ink-faint)">medallion architecture</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-tag">01</span><span class="sec-title">about</span><span class="sec-line"></span></div>
+      <div class="about-grid reveal">
+        <div>
+          <p>I'm an Azure Data Engineer based in Toronto, currently building data platforms at Bell. My work centers on ingesting, transforming, and governing data across Azure Data Factory, Databricks, and Microsoft Fabric — usually landing in a medallion architecture on Delta Lake.</p>
+          <p>Before Bell, I worked as a Data Engineer at Techmicra IT Solutions, building ETL pipelines and supporting real-time ingestion and data governance work. I hold an MSc in Computer Science from Lakehead University and a Bachelor's in Computer Engineering from Gujarat Technological University, along with the Databricks Certified Data Engineer Associate and Microsoft DP-900 certifications.</p>
+          <p>Outside of client work, I build end-to-end pipeline projects — from REST API ingestion through Synapse and Fabric to Power BI dashboards — to keep hands-on with the platform as it evolves.</p>
+        </div>
+        <div>
+          <div class="stat-box">
+            <div class="stat-num">May 2025 →</div>
+            <div class="stat-label">Azure Data Engineer, Bell</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">DP-900</div>
+            <div class="stat-label">Microsoft Certified · Azure Data Fundamentals</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">Databricks</div>
+            <div class="stat-label">Certified Data Engineer Associate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-tag">02</span><span class="sec-title">experience</span><span class="sec-line"></span></div>
+      <div class="timeline reveal">
+        <div class="tl-item">
+          <div class="tl-role">Azure Data Engineer <span style="color:var(--ink-faint); font-weight:400;">@</span> <span class="tl-org">Bell</span></div>
+          <div class="tl-meta">Toronto, Canada — May 2025 – Present</div>
+          <div class="tl-desc">Building end-to-end ETL/ELT pipelines in Azure Data Factory and Snowflake, with monitoring and alerting via Azure Monitor and Log Analytics, and performance tuning across Cosmos DB and Synapse Analytics workloads.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-role">Data Engineer <span style="color:var(--ink-faint); font-weight:400;">@</span> <span class="tl-org">Techmicra IT Solutions</span></div>
+          <div class="tl-meta">India — Jan 2024 – Aug 2024</div>
+          <div class="tl-desc">Developed ETL pipelines using ADF and Apache Spark, supported real-time ingestion with Azure Event Hubs and Databricks Structured Streaming, and worked on data governance and metadata management using Azure Purview.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-tag">03</span><span class="sec-title">projects</span><span class="sec-line"></span></div>
+
+      <div class="proj-lead reveal">
+        <div class="card">
+          <div class="card-tag">lead project</div>
+          <h3>Healthcare RCM Pipeline</h3>
+          <p>An Azure Databricks pipeline built around healthcare revenue-cycle-management data, using a medallion architecture (Bronze / Silver / Gold) to move raw claims data toward analytics-ready tables.</p>
+          <div class="tags">
+            <span class="tag">Databricks</span><span class="tag">PySpark</span><span class="tag">Delta Lake</span><span class="tag">Unity Catalog</span>
+          </div>
+          <a class="card-link" href="https://github.com/shreyy-parmar/azure-databricks-healthcare-pipeline" target="_blank" rel="noopener">View repo →</a>
+        </div>
+
+        <div class="card">
+          <div class="card-tag">supporting project</div>
+          <h3>NYC Taxi · Synapse Analytics</h3>
+          <p>REST API ingestion into a Synapse Analytics + Delta Lake pipeline, processing NYC Taxi trip data at scale to demonstrate performance-oriented pipeline design.</p>
+          <div class="tags">
+            <span class="tag">Synapse Analytics</span><span class="tag">Delta Lake</span><span class="tag">REST API</span>
+          </div>
+          <a class="card-link" href="https://github.com/shreyy-parmar/azure-synapse-analytics-pipeline" target="_blank" rel="noopener">View repo →</a>
+        </div>
+      </div>
+
+      <div class="proj-more reveal">
+        <div class="card-sm">
+          <h4>Microsoft Fabric — SCD Type 1</h4>
+          <p>Slowly changing dimensions via Delta MERGE with MD5 hashing, using OneLake shortcuts, an on-premises data gateway, and Dataflow Gen2.</p>
+          <div class="tags"><span class="tag">Fabric</span><span class="tag">OneLake</span></div>
+        </div>
+        <div class="card-sm">
+          <h4>Customer 360 — E-Commerce</h4>
+          <p>A Synapse dedicated SQL pool fed by REST API ingestion, with materialized views forming the Gold layer feeding Power BI.</p>
+          <div class="tags"><span class="tag">Synapse</span><span class="tag">Power BI</span></div>
+        </div>
+        <div class="card-sm">
+          <h4>Retail Sales Pipeline</h4>
+          <p>End-to-end medallion pipeline on ADF, ADLS Gen2, and Azure SQL DB, with SCD Type 1 and Type 2 implemented in Data Flows.</p>
+          <div class="tags"><span class="tag">ADF</span><span class="tag">Key Vault</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-tag">04</span><span class="sec-title">skills</span><span class="sec-line"></span></div>
+      <div class="skills-grid reveal">
+        <div>
+          <div class="skill-col-title">Ingestion</div>
+          <ul class="skill-list"><li>Azure Data Factory</li><li>REST API ingestion</li><li>Azure Event Hubs</li></ul>
+        </div>
+        <div>
+          <div class="skill-col-title">Transformation</div>
+          <ul class="skill-list"><li>Databricks</li><li>PySpark</li><li>Dataflow Gen2</li><li>Scala</li><li>Pandas</li></ul>
+        </div>
+        <div>
+          <div class="skill-col-title">Storage</div>
+          <ul class="skill-list"><li>Delta Lake</li><li>ADLS Gen2</li><li>OneLake</li></ul>
+        </div>
+        <div>
+          <div class="skill-col-title">Warehousing</div>
+          <ul class="skill-list"><li>Synapse Analytics</li><li>Microsoft Fabric</li><li>Snowflake</li><li>Cosmos DB</li></ul>
+        </div>
+        <div>
+          <div class="skill-col-title">Governance</div>
+          <ul class="skill-list"><li>Unity Catalog</li><li>Key Vault</li><li>Azure Purview</li></ul>
+        </div>
+        <div>
+          <div class="skill-col-title">Ops &amp; BI</div>
+          <ul class="skill-list"><li>Azure DevOps / CI-CD</li><li>Power BI</li><li>Azure Monitor / Log Analytics</li><li>Logic Apps / Functions</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certifications">
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-tag">05</span><span class="sec-title">certifications</span><span class="sec-line"></span></div>
+      <div class="cert-row reveal">
+        <a class="cert-badge" href="https://credentials.databricks.com/74164f09-cf47-43e9-bbcf-071a25679d4e#acc.WtB3FiOA" target="_blank" rel="noopener" style="text-decoration:none;">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="15" stroke="#2b5c8a" stroke-width="1.4"/><path d="M10 17.5 L15 22 L24 12" stroke="#2b5c8a" stroke-width="1.6" fill="none"/></svg>
+          <div>
+            <div class="cert-name">Databricks Certified Data Engineer Associate</div>
+            <div class="cert-issuer">Databricks · view credential →</div>
+          </div>
+        </a>
+        <a class="cert-badge" href="https://learn.microsoft.com/en-in/users/shreyyogeshbhaiparmar-0398/credentials/48c7f7bb9e4a6930" target="_blank" rel="noopener" style="text-decoration:none;">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="15" stroke="#2b5c8a" stroke-width="1.4"/><path d="M10 17.5 L15 22 L24 12" stroke="#2b5c8a" stroke-width="1.6" fill="none"/></svg>
+          <div>
+            <div class="cert-name">DP-900 · Azure Data Fundamentals</div>
+            <div class="cert-issuer">Microsoft · view credential →</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-tag">06</span><span class="sec-title">education</span><span class="sec-line"></span></div>
+      <div class="timeline reveal">
+        <div class="tl-item">
+          <div class="tl-role">MSc, Computer Science <span style="color:var(--ink-faint); font-weight:400;">@</span> <span class="tl-org">Lakehead University</span></div>
+          <div class="tl-meta">Canada — Sept 2024 – Sept 2025</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-role">BE, Computer Engineering <span style="color:var(--ink-faint); font-weight:400;">@</span> <span class="tl-org">Gujarat Technological University</span></div>
+          <div class="tl-meta">India — Jul 2020 – May 2024</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact">
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-tag">07</span><span class="sec-title">contact</span><span class="sec-line"></span></div>
+      <div class="contact-inner reveal">
+        <h2>Let's talk about data pipelines, or roles where I can build them.</h2>
+        <div class="contact-links">
+          <a href="mailto:shreyyogeshbhaiparmar@gmail.com">shreyyogeshbhaiparmar@gmail.com</a>
+          <a href="https://github.com/shreyy-parmar" target="_blank" rel="noopener">github.com/shreyy-parmar</a>
+          <a href="https://linkedin.com/in/shreyparmarr" target="_blank" rel="noopener">linkedin.com/in/shreyparmarr</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <span>© <span id="year"></span> Shrey Parmar</span>
+  <span>Toronto, Canada</span>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const toggle = document.getElementById('navtoggle');
+  const links = document.getElementById('navlinks');
+  toggle.addEventListener('click', () => {
+    const open = links.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    links.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
